@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Arthur Galiano" />
+
+    <title>Linux permission generator</title>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+
+<body>
+    <div class="github-badge-wrapper">
+        <a href="https://github.com/ArthurGaliano" target="_blank">
+            <img class="github-logo" src="assets/github-logo.png" alt="Github logo" title="Repository">
+
+            <b class="badge-title">
+        Repository
+      </b>
+        </a>
+    </div>
+
+    <div id="app">
+        <div id="card">
+            <h1 class="title">
+                Linux permission generator
+            </h1>
+
+            <p class="description">
+                A simple and easy way to generate your Linux File-system permissions.
+            </p>
+
+            <table class="permission-box" cellspacing="0" cellpadding="0">
+                <thead>
+                    <tr>
+                        <th>
+                            Owner
+                        </th>
+                        <th>
+                            Groups
+                        </th>
+                        <th>
+                            Others
+                        </th>
+                    </tr>
+                </thead>
+
+                <body>
+                    <tr align="center">
+                        <td>
+                            {{ ownerPermission }}
+                        </td>
+                        <td>
+                            {{ groupsPermission }}
+                        </td>
+                        <td>
+                            {{ othersPermission }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <table cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr align="center">
+                                        <td>
+                                            {{ owner.r | bit }}
+                                        </td>
+                                        <td>
+                                            {{ owner.w | bit }}
+                                        </td>
+                                        <td>
+                                            {{ owner.x | bit }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+
+                        <td>
+                            <table cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr align="center">
+                                        <td>
+                                            {{ groups.r | bit }}
+                                        </td>
+                                        <td>
+                                            {{ groups.w | bit }}
+                                        </td>
+                                        <td>
+                                            {{ groups.x | bit }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+
+                        <td>
+                            <table cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr align="center">
+                                        <td>
+                                            {{ others.r | bit }}
+                                        </td>
+                                        <td>
+                                            {{ others.w | bit }}
+                                        </td>
+                                        <td>
+                                            {{ others.x | bit }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>
+                            <table cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr align="center">
+                                        <td>
+                                            <input type="checkbox" title="Read" v-model="owner.r" />
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" title="Write" v-model="owner.w" />
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" title="Execute" v-model="owner.x" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+
+                        <td>
+                            <table cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr align="center">
+                                        <td>
+                                            <input type="checkbox" title="Read" v-model="groups.r" />
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" title="Write" v-model="groups.w" />
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" title="Execute" v-model="groups.x" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+
+                        <td>
+                            <table cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr align="center">
+                                        <td>
+                                            <input type="checkbox" title="Read" v-model="others.r" />
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" title="Write" v-model="others.w" />
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" title="Execute" v-model="others.x" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+
+                    </tr>
+
+                    <tr align="center">
+                        <td>
+                            {{ ownerOctal }}
+                        </td>
+                        <td>
+                            {{ groupsOctal }}
+                        </td>
+                        <td>
+                            {{ othersOctal }}
+                        </td>
+                    </tr>
+                </body>
+            </table>
+
+            <div class="command-box">
+                <h3>Command</h3>
+                <div class="command">
+                    <span style="color: yellow">$</span>
+                    <span>sudo chmod {{ fullOctal }}</span>
+                </div>
+            </div>
+
+            <div class="command-box">
+                <h3>Value Table</h3>
+                <div class="command">
+
+                    <table cellpadding="2">
+                        <tbody cellpadding="2" cellmargin="2">
+                            <tr>
+                                <td>Value for access rights</td>
+                                <td>Simbol</td>
+                                <td>Meaning</td>
+                            </tr>
+                            <tr>
+                                <td>0</td>
+                                <td>---</td>
+                                <td>No Access</td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>--x</td>
+                                <td>Execute</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>-w-</td>
+                                <td>Write</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>-wx</td>
+                                <td>Write And Execute</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>r--</td>
+                                <td>Lecture</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>r-x</td>
+                                <td>Lecture and Execute</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>rw-</td>
+                                <td>Lecture and Write</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>rwx</td>
+                                <td>The Three</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <a rel="author" href="https://github.com/ArthurGaliano" title="Homepage">
+      Made by Arthur Galiano 🚀
+    </a>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="index.js"></script>
+</body>
+
+</html>
